@@ -7,7 +7,6 @@
 ## 목차
 
 - [프로젝트 1: 자동화 도구 비교 구현](#프로젝트-1-자동화-도구-비교-구현)
-- [프로젝트 2: 자유 주제 자동화 설계 및 구현](#프로젝트-2-자유-주제-자동화-설계-및-구현)
 
 ---
 
@@ -51,9 +50,11 @@ Gmail 발송       Gmail 발송
 
 #### 실행 결과 화면
 
-![Make 긍정 응답 이메일]<img width="747" height="162" alt="Image" src="https://github.com/user-attachments/assets/1b5e2ab7-90e1-4f59-81eb-e47815786b53" />
-![Make 개선 필요 이메일]<img width="855" height="154" alt="Image" src="https://github.com/user-attachments/assets/1b94a2d4-087f-49ff-9822-427c518164aa" />
+![Make 긍정 응답 이메일]
+<img width="855" height="154" alt="Image" src="https://github.com/user-attachments/assets/1b94a2d4-087f-49ff-9822-427c518164aa" />
 
+![Make 개선 필요 이메일]
+<img width="747" height="162" alt="Image" src="https://github.com/user-attachments/assets/1b5e2ab7-90e1-4f59-81eb-e47815786b53" />
 ---
 
 ### Zapier 구현
@@ -80,13 +81,14 @@ Zapier는 Router 기능이 없어 **Zap 2개**로 구현하였습니다.
 
 #### 워크플로우 구성 화면
 
-![Zapier Zap1 워크플로우]<img width="471" height="819" alt="Image" src="https://github.com/user-attachments/assets/8de4c6b6-90be-412f-bf1a-08ea61765159" />
-![Zapier Zap2 워크플로우]<img width="480" height="802" alt="Image" src="https://github.com/user-attachments/assets/f6665ccf-71db-4251-9b99-952f24f71a46" />
+![Zapier Zap1 워크플로우]
+<img width="471" height="819" alt="Image" src="https://github.com/user-attachments/assets/8de4c6b6-90be-412f-bf1a-08ea61765159" />
+![Zapier Zap2 워크플로우]
+<img width="480" height="802" alt="Image" src="https://github.com/user-attachments/assets/f6665ccf-71db-4251-9b99-952f24f71a46" />
 
-#### 실행 결과 화면
+#### 실행 결과
 
-![Zapier 긍정 응답 이메일](screenshots/zapier_result_positive.png)
-![Zapier 개선 필요 이메일](screenshots/zapier_result_negative.png)
+Filter 기능은 유료 플랜이 필요하여 실행 결과를 첨부하지 못했다.
 
 ---
 
@@ -134,52 +136,3 @@ Zapier는 Router 기능이 없어 **Zap 2개**로 구현하였습니다.
 | 처음 노코드 자동화를 시작할 때 | **Zapier** |
 
 ---
-
-## 프로젝트 2: 자유 주제 자동화 설계 및 구현
-
-### 반복 업무 정의
-
-> _(작성 예정)_
-
-### 선정 도구 및 이유
-
-> _(작성 예정)_
-
-### 워크플로우 설계
-
-```
-(다이어그램 또는 흐름 설명 작성 예정)
-```
-
-### 워크플로우 구성 화면
-
-> _(스크린샷 추가 예정)_
-
-### 실행 결과 화면
-
-> _(스크린샷 추가 예정)_
-
----
-
-## 학습 정리
-
-### Trigger와 Action이란?
-
-- **Trigger**: 자동화를 시작하는 이벤트 (예: 새 Form 응답 제출)
-- **Action**: Trigger 발생 후 실행되는 동작 (예: 이메일 발송, 시트 기록)
-
-### 조건 분기(Filter/Router)란?
-
-- 데이터 조건에 따라 다른 Action을 실행하도록 흐름을 나누는 기능
-- Make: **Router** (하나의 시나리오에서 다중 경로)
-- Zapier: **Filter** (조건 불충족 시 Zap 중단)
-
----
-
-## 사용 도구
-
-- [Make](https://make.com) — 시각적 노드 기반 자동화 플랫폼
-- [Zapier](https://zapier.com) — 리스트 기반 자동화 플랫폼
-- Google Forms — 설문 데이터 수집
-- Google Sheets — 응답 데이터 저장
-- Gmail — 자동 이메일 발송
