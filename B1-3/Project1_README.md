@@ -79,8 +79,15 @@ Zapier는 Router 기능이 없어 **Zap 2개**로 구현하였습니다.
 #### 워크플로우 구성 화면
 
 ![Zapier Zap1 워크플로우]
+
+
 <img width="471" height="819" alt="Image" src="https://github.com/user-attachments/assets/8de4c6b6-90be-412f-bf1a-08ea61765159" />
+
+
+
 ![Zapier Zap2 워크플로우]
+
+
 <img width="480" height="802" alt="Image" src="https://github.com/user-attachments/assets/f6665ccf-71db-4251-9b99-952f24f71a46" />
 
 #### 실행 결과
