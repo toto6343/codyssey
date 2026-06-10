@@ -97,7 +97,8 @@ Condition 3: Title Contains "Gemini"
 
 ### Make 워크플로우 구성 화면
 
-![Make 워크플로우](project2_workflow.png)
+![Make 워크플로우]
+<img width="1738" height="430" alt="Image" src="https://github.com/user-attachments/assets/ec50923a-a38e-4a7e-aa1d-95c61cfb9822" />
 
 **실행 결과 요약:**
 - RSS 모듈: 1건 감지
@@ -111,7 +112,8 @@ Condition 3: Title Contains "Gemini"
 
 ### Gmail 수신 결과
 
-![Gmail 알림 결과](project2_gmail_result.png)
+![Gmail 알림 결과]
+<img width="1016" height="141" alt="Image" src="https://github.com/user-attachments/assets/cafb02d0-4de6-4c1e-82ef-6b31ebeb05e5" />
 
 **수신된 이메일 목록:**
 - `[AI 뉴스] Claude Code costs up to $200 a month. Goose does the same thing for free.`
