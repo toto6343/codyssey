@@ -47,12 +47,12 @@ Gmail 발송       Gmail 발송
 
 #### 워크플로우 구성 화면
 
-![Make 워크플로우](screenshots/make_workflow.png)
+![Make 워크플로우]<img width="1110" height="736" alt="Image" src="https://github.com/user-attachments/assets/d5d9b693-7cad-4e96-8c83-86c1842718c2" />
 
 #### 실행 결과 화면
 
-![Make 긍정 응답 이메일](screenshots/make_result_positive.png)
-![Make 개선 필요 이메일](screenshots/make_result_negative.png)
+![Make 긍정 응답 이메일]<img width="747" height="162" alt="Image" src="https://github.com/user-attachments/assets/1b5e2ab7-90e1-4f59-81eb-e47815786b53" />
+![Make 개선 필요 이메일]<img width="855" height="154" alt="Image" src="https://github.com/user-attachments/assets/1b94a2d4-087f-49ff-9822-427c518164aa" />
 
 ---
 
@@ -80,8 +80,8 @@ Zapier는 Router 기능이 없어 **Zap 2개**로 구현하였습니다.
 
 #### 워크플로우 구성 화면
 
-![Zapier Zap1 워크플로우](screenshots/zapier_zap1.png)
-![Zapier Zap2 워크플로우](screenshots/zapier_zap2.png)
+![Zapier Zap1 워크플로우]<img width="471" height="819" alt="Image" src="https://github.com/user-attachments/assets/8de4c6b6-90be-412f-bf1a-08ea61765159" />
+![Zapier Zap2 워크플로우]<img width="480" height="802" alt="Image" src="https://github.com/user-attachments/assets/f6665ccf-71db-4251-9b99-952f24f71a46" />
 
 #### 실행 결과 화면
 
