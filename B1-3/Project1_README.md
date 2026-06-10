@@ -47,8 +47,11 @@ Gmail 발송       Gmail 발송
 ![Make 긍정 응답 이메일]
 <img width="855" height="154" alt="Image" src="https://github.com/user-attachments/assets/1b94a2d4-087f-49ff-9822-427c518164aa" />
 
+
+
 ![Make 개선 필요 이메일]
 <img width="747" height="162" alt="Image" src="https://github.com/user-attachments/assets/1b5e2ab7-90e1-4f59-81eb-e47815786b53" />
+
 ---
 
 ### Zapier 구현
