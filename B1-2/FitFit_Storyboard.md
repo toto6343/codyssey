@@ -95,8 +95,6 @@ heavy fog, cinematic wide shot, no people, 8k, --ar 16:9 --style raw
 
 **화면 구성:** 풀바디 · 도로 중앙 / 후드 인물 실루엣 / 네온사인 배경 / 카메라 천천히 줌인
 
-**내레이션:** *"밤이 내 핏을 정의한다."*
-
 | 도구 | 내용 |
 |------|------|
 | 이미지 | Midjourney v6 — 후드 인물 실루엣 + 홀로그래픽 재킷 |
@@ -152,7 +150,7 @@ pink cyan light reflections, ultra detailed fabric texture, product shot, --ar 1
 
 **화면 구성:** 풀바디 · 골목 중앙 / 홀로그래픽 풀셋 착장 / 카메라 사이드 트래킹
 
-**내레이션:** *"핏이 나를 말한다."*
+**내레이션:** *"Fit the city. Fit yourself"*
 
 | 도구 | 내용 |
 |------|------|
@@ -176,7 +174,7 @@ side tracking camera, cyberpunk street, cinematic color grade, --ar 16:9 --sref 
 
 **화면 구성:** 미디엄샷 · FIT FIT 로고 글리치 등장 / 인물 워킹 / 배경 디지털 도시
 
-**내레이션:** *FIT FIT / "Fit the city. Fit yourself."*
+**내레이션:** *FIT FIT"*
 
 | 도구 | 내용 |
 |------|------|
@@ -199,8 +197,6 @@ neon pink cyan, cinematic, --ar 16:9
 **목표:** AI/데이터 시각화 트랜지션 → 브랜드 최종 아이덴티티 각인 + CTA
 
 **화면 구성:** 추상 디지털 → 의상 클로즈업 / 회로+데이터 파티클 / FIT FIT 로고 최종 고정 / FITFIT.AI 텍스트
-
-**내레이션:** *"데이터가 디자인하다. 핏이 완성하다." / (화면) FITFIT.AI*
 
 | 도구 | 내용 |
 |------|------|
