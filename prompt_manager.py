@@ -144,8 +144,30 @@ def search_prompt(prompts):
 
 
 
+# ------------------------------------------------------------
+# 5. 프롬프트 상세 보기 (보너스: 조회수 기록)
+# ------------------------------------------------------------
 def show_detail(prompts):
-    pass
+    print("\n=== 프롬프트 상세 보기 ===")
+    show_list(prompts)
+    idx = get_valid_index(prompts)
+    if idx is None:
+        return
+
+    p = prompts[idx]
+    p["views"] += 1  # 조회수 증가 (보너스 과제)
+
+    star = "⭐" if p["favorite"] else "없음"
+    print("\n" + "─" * 30)
+    print(f"제목: {p['title']}")
+    print(f"카테고리: {p['category']}")
+    print(f"즐겨찾기: {star}")
+    print(f"조회수: {p['views']}")
+    print("─" * 30)
+    print("내용:")
+    print(p["content"])
+    print("─" * 30)
+
 
 
 def toggle_favorite(prompts):
