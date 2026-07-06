@@ -230,10 +230,18 @@ def edit_prompt(prompts):
 
     print("\n프롬프트가 수정되었습니다!")
 
-
-
+# ------------------------------------------------------------
+# 9. 프롬프트 삭제 (보너스: CRUD)
+# ------------------------------------------------------------
 def delete_prompt(prompts):
-    pass
+    print("\n=== 프롬프트 삭제 ===")
+    show_list(prompts)
+    idx = get_valid_index(prompts)
+    if idx is None:
+        return
+
+    p = prompts.pop(idx)
+    print(f"\n'{p['title']}' 프롬프트가 삭제되었습니다.")
 
 
 def show_top_viewed(prompts):
