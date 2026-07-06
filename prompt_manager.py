@@ -292,9 +292,39 @@ def load_from_json(prompts, filename=JSON_FILE):
         print(f"\n불러오는 중 오류가 발생했습니다: {e}")
 
 
+# ------------------------------------------------------------
+# 13. 카테고리별 Markdown 내보내기 (보너스: 영속화)
+# ------------------------------------------------------------
 def export_markdown(prompts, export_dir=EXPORT_DIR):
-    pass
+    if not prompts:
+        print("\n내보낼 프롬프트가 없습니다.")
+        return
 
+    os.makedirs(export_dir, exist_ok=True)
+
+    grouped = {}
+    for p in prompts:
+        grouped.setdefault(p["category"], []).append(p)
+
+    exported_files = []
+    for category, items in grouped.items():
+        safe_name = category.replace(" ", "_")
+        filepath = os.path.join(export_dir, f"{safe_name}.md")
+
+        with open(filepath, "w", encoding="utf-8") as f:
+            f.write(f"# {category} 프롬프트 모음\n\n")
+            for p in items:
+                star = " ⭐" if p["favorite"] else ""
+                f.write(f"## {p['title']}{star}\n\n")
+                f.write(f"{p['content']}\n\n")
+                f.write(f"- 조회수: {p['views']}\n\n")
+                f.write("---\n\n")
+
+        exported_files.append(filepath)
+
+    print(f"\n다음 파일로 내보내기 완료:")
+    for path in exported_files:
+        print(f" - {path}")
 
 # ------------------------------------------------------------
 # 메인 함수
