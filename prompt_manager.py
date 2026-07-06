@@ -327,47 +327,41 @@ def export_markdown(prompts, export_dir=EXPORT_DIR):
         print(f" - {path}")
 
 # ------------------------------------------------------------
-# 메인 함수
+# 메인 루프
 # ------------------------------------------------------------
 def main():
-    prompts = []
+    prompts = create_default_prompts()
+
+    actions = {
+        "1": lambda: add_prompt(prompts),
+        "2": lambda: show_list(prompts),
+        "3": lambda: show_by_category(prompts),
+        "4": lambda: search_prompt(prompts),
+        "5": lambda: show_detail(prompts),
+        "6": lambda: toggle_favorite(prompts),
+        "7": lambda: show_favorites(prompts),
+        "8": lambda: edit_prompt(prompts),
+        "9": lambda: delete_prompt(prompts),
+        "10": lambda: show_top_viewed(prompts),
+        "11": lambda: save_to_json(prompts),
+        "12": lambda: load_from_json(prompts),
+        "13": lambda: export_markdown(prompts),
+    }
 
     while True:
         show_menu()
-        choice = input("선택: ")
+        choice = input("선택: ").strip()
 
         if choice == "0":
-            print("프로그램을 종료합니다.")
+            print("\n프로그램을 종료합니다. 이용해주셔서 감사합니다!")
             break
 
-        elif choice == "1":
-            add_prompt(prompts)
-        elif choice == "2":
-            show_list(prompts)
-        elif choice == "3":
-            show_by_category(prompts)
-        elif choice == "4":
-            search_prompt(prompts)
-        elif choice == "5":
-            show_detail(prompts)
-        elif choice == "6":
-            toggle_favorite(prompts)
-        elif choice == "7":
-            show_favorites(prompts)
-        elif choice == "8":
-            edit_prompt(prompts)
-        elif choice == "9":
-            delete_prompt(prompts)
-        elif choice == "10":
-            show_top_viewed(prompts)
-        elif choice == "11":
-            save_to_json(prompts)
-        elif choice == "12":
-            load_from_json(prompts)
-        elif choice == "13":
-            export_markdown(prompts)
-        else:
-            print("잘못된 메뉴입니다.")
+        action = actions.get(choice)
+        if action is None:
+            print("\n잘못된 번호입니다. 다시 선택해주세요.")
+            continue
+
+        action()
 
 
 if __name__ == "__main__":
