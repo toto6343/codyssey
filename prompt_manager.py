@@ -168,15 +168,40 @@ def show_detail(prompts):
     print(p["content"])
     print("─" * 30)
 
-
-
+# ------------------------------------------------------------
+# 6. 즐겨찾기 추가/해제
+# ------------------------------------------------------------
 def toggle_favorite(prompts):
-    pass
+    print("\n=== 즐겨찾기 관리 ===")
+    show_list(prompts)
+    idx = get_valid_index(prompts)
+    if idx is None:
+        return
+
+    p = prompts[idx]
+    p["favorite"] = not p["favorite"]
+
+    if p["favorite"]:
+        print(f"\n'{p['title']}' 프롬프트를 즐겨찾기에 추가했습니다!")
+    else:
+        print(f"\n'{p['title']}' 프롬프트를 즐겨찾기에서 해제했습니다.")
 
 
+# ------------------------------------------------------------
+# 7. 즐겨찾기 목록
+# ------------------------------------------------------------
 def show_favorites(prompts):
-    pass
+    print("\n=== 즐겨찾기 목록 ===")
+    favorites = [p for p in prompts if p["favorite"]]
 
+    if not favorites:
+        print("즐겨찾기한 프롬프트가 없습니다.")
+        return
+
+    for i, p in enumerate(favorites, start=1):
+        print(f"{i}. [{p['category']}] {p['title']} ⭐")
+
+    print(f"\n총 {len(favorites)}개의 즐겨찾기")
 
 def edit_prompt(prompts):
     pass
