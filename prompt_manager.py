@@ -203,8 +203,33 @@ def show_favorites(prompts):
 
     print(f"\n총 {len(favorites)}개의 즐겨찾기")
 
+# ------------------------------------------------------------
+# 8. 프롬프트 수정 (보너스: CRUD)
+# ------------------------------------------------------------
 def edit_prompt(prompts):
-    pass
+    print("\n=== 프롬프트 수정 ===")
+    show_list(prompts)
+    idx = get_valid_index(prompts)
+    if idx is None:
+        return
+
+    p = prompts[idx]
+    print(f"\n수정할 항목을 입력하세요. (변경하지 않으려면 엔터)")
+
+    new_title = input(f"제목 [{p['title']}]: ").strip()
+    new_content = input(f"내용 [{p['content'][:20]}...]: ").strip()
+
+    change_category = input("카테고리를 변경하시겠습니까? (y/n): ").strip().lower()
+
+    if new_title:
+        p["title"] = new_title
+    if new_content:
+        p["content"] = new_content
+    if change_category == "y":
+        p["category"] = choose_category()
+
+    print("\n프롬프트가 수정되었습니다!")
+
 
 
 def delete_prompt(prompts):
