@@ -1,4 +1,13 @@
 # -*- coding: utf-8 -*-
+"""
+나만의 프롬프트 관리 프로그램
+--------------------------------
+GenAI 활용을 위해 쌓아온 프롬프트들을 카테고리별로 정리하고,
+검색/즐겨찾기/조회수 관리까지 할 수 있는 콘솔 프로그램입니다.
+
+실행 방법:
+    python prompt_manager.py
+"""
 
 import json
 import os
@@ -12,25 +21,104 @@ EXPORT_DIR = "exports"
 
 
 # ------------------------------------------------------------
-# 기본 데이터
+# 기본 데이터 (이전 미션에서 작성한 프롬프트 최소 3개 이상 등록)
 # ------------------------------------------------------------
 def create_default_prompts():
-    pass
+    """프로그램 시작 시 기본으로 등록되는 프롬프트 목록을 반환한다."""
+    return [
+        {
+            "title": "블로그 글 작성 도우미",
+            "content": (
+                "당신은 10년 경력의 전문 블로거입니다. "
+                "주어진 주제에 대해 SEO에 최적화된 블로그 글을 작성해주세요. "
+                "서론, 본론, 결론 구조를 갖추고, 독자의 관심을 끄는 제목을 3개 제안해주세요."
+            ),
+            "category": "텍스트 생성",
+            "favorite": True,
+            "views": 0,
+        },
+        {
+            "title": "제품 썸네일 생성",
+            "content": (
+                "다음 제품의 매력적인 썸네일 이미지를 생성해주세요. "
+                "배경은 깔끔한 화이트 스튜디오 톤으로, 제품이 정중앙에 위치하도록 하고 "
+                "자연광이 비치는 느낌으로 표현해주세요."
+            ),
+            "category": "이미지 생성",
+            "favorite": False,
+            "views": 0,
+        },
+        {
+            "title": "IT 컨설턴트 페르소나",
+            "content": (
+                "당신은 15년 경력의 IT 전략 컨설턴트입니다. "
+                "기술적인 내용을 비전문가도 이해할 수 있도록 쉽게 설명하며, "
+                "항상 비즈니스 임팩트 관점에서 조언합니다."
+            ),
+            "category": "페르소나",
+            "favorite": False,
+            "views": 0,
+        },
+        {
+            "title": "뉴스 요약 프롬프트",
+            "content": (
+                "다음 뉴스 기사를 3줄로 요약해주세요. "
+                "핵심 사실, 배경, 전망을 각각 한 문장으로 정리해주세요."
+            ),
+            "category": "자동화",
+            "favorite": False,
+            "views": 0,
+        },
+    ]
 
 
 # ------------------------------------------------------------
-# 공통 입력 함수
+# 공통 입력 유틸리티
 # ------------------------------------------------------------
 def get_non_empty_input(label):
-    pass
+    """빈 값이 입력되면 다시 입력을 요청하는 입력 함수."""
+    while True:
+        value = input(label).strip()
+        if value:
+            return value
+        print("빈 값은 입력할 수 없습니다. 다시 입력해주세요.\n")
 
 
 def choose_category():
-    pass
+    """카테고리 목록을 보여주고 선택하게 한 뒤 선택된 카테고리 이름을 반환한다."""
+    print("\n카테고리 선택:")
+    for i, cat in enumerate(CATEGORIES, start=1):
+        print(f"{i}) {cat}")
+    print(f"{len(CATEGORIES) + 1}) 직접 입력")
+
+    choice = input("선택: ").strip()
+    if choice.isdigit():
+        idx = int(choice)
+        if 1 <= idx <= len(CATEGORIES):
+            return CATEGORIES[idx - 1]
+        if idx == len(CATEGORIES) + 1:
+            return get_non_empty_input("카테고리 이름 직접 입력: ")
+
+    print("잘못된 입력입니다. '기타'로 설정합니다.")
+    return "기타"
 
 
 def get_valid_index(prompts, label="번호 입력: "):
-    pass
+    """유효한 프롬프트 번호를 입력받는다. 잘못된 입력이면 None을 반환한다."""
+    if not prompts:
+        print("등록된 프롬프트가 없습니다.")
+        return None
+
+    raw = input(label).strip()
+    if not raw.isdigit():
+        print("숫자로 입력해주세요.")
+        return None
+
+    idx = int(raw) - 1
+    if idx < 0 or idx >= len(prompts):
+        print("존재하지 않는 번호입니다.")
+        return None
+    return idx
 
 
 # ------------------------------------------------------------
@@ -55,7 +143,7 @@ def show_menu():
 
 
 # ------------------------------------------------------------
-# 기능 함수
+# 1. 프롬프트 추가
 # ------------------------------------------------------------
 def add_prompt(prompts):
     print("\n=== 프롬프트 추가 ===")
@@ -89,6 +177,7 @@ def show_list(prompts):
         print(f"{i}. [{p['category']}] {p['title']}{star}")
 
     print(f"\n총 {len(prompts)}개의 프롬프트")
+
 
 # ------------------------------------------------------------
 # 3. 카테고리별 조회
@@ -143,7 +232,6 @@ def search_prompt(prompts):
     print(f"\n{len(results)}개의 프롬프트를 찾았습니다.")
 
 
-
 # ------------------------------------------------------------
 # 5. 프롬프트 상세 보기 (보너스: 조회수 기록)
 # ------------------------------------------------------------
@@ -167,6 +255,7 @@ def show_detail(prompts):
     print("내용:")
     print(p["content"])
     print("─" * 30)
+
 
 # ------------------------------------------------------------
 # 6. 즐겨찾기 추가/해제
@@ -203,6 +292,7 @@ def show_favorites(prompts):
 
     print(f"\n총 {len(favorites)}개의 즐겨찾기")
 
+
 # ------------------------------------------------------------
 # 8. 프롬프트 수정 (보너스: CRUD)
 # ------------------------------------------------------------
@@ -229,6 +319,7 @@ def edit_prompt(prompts):
         p["category"] = choose_category()
 
     print("\n프롬프트가 수정되었습니다!")
+
 
 # ------------------------------------------------------------
 # 9. 프롬프트 삭제 (보너스: CRUD)
@@ -258,7 +349,6 @@ def show_top_viewed(prompts):
     for i, p in enumerate(sorted_prompts, start=1):
         star = " ⭐" if p["favorite"] else ""
         print(f"{i}. [{p['category']}] {p['title']}{star} - 조회수 {p['views']}")
-
 
 
 # ------------------------------------------------------------
@@ -325,6 +415,7 @@ def export_markdown(prompts, export_dir=EXPORT_DIR):
     print(f"\n다음 파일로 내보내기 완료:")
     for path in exported_files:
         print(f" - {path}")
+
 
 # ------------------------------------------------------------
 # 메인 루프
