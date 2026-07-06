@@ -244,8 +244,21 @@ def delete_prompt(prompts):
     print(f"\n'{p['title']}' 프롬프트가 삭제되었습니다.")
 
 
+# ------------------------------------------------------------
+# 10. 조회수 Top 목록 (보너스: 사용 기록)
+# ------------------------------------------------------------
 def show_top_viewed(prompts):
-    pass
+    print("\n=== 조회수 Top 목록 ===")
+    if not prompts:
+        print("등록된 프롬프트가 없습니다.")
+        return
+
+    sorted_prompts = sorted(prompts, key=lambda p: p["views"], reverse=True)
+
+    for i, p in enumerate(sorted_prompts, start=1):
+        star = " ⭐" if p["favorite"] else ""
+        print(f"{i}. [{p['category']}] {p['title']}{star} - 조회수 {p['views']}")
+
 
 
 def save_to_json(prompts, filename=JSON_FILE):
