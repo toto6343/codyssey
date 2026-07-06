@@ -75,12 +75,47 @@ def add_prompt(prompts):
     print("\n프롬프트가 추가되었습니다!")
 
 
+# ------------------------------------------------------------
+# 2. 프롬프트 목록
+# ------------------------------------------------------------
 def show_list(prompts):
-    pass
+    print("\n=== 프롬프트 목록 ===")
+    if not prompts:
+        print("등록된 프롬프트가 없습니다.")
+        return
 
+    for i, p in enumerate(prompts, start=1):
+        star = " ⭐" if p["favorite"] else ""
+        print(f"{i}. [{p['category']}] {p['title']}{star}")
 
+    print(f"\n총 {len(prompts)}개의 프롬프트")
+
+# ------------------------------------------------------------
+# 3. 카테고리별 조회
+# ------------------------------------------------------------
 def show_by_category(prompts):
-    pass
+    print("\n=== 카테고리별 조회 ===")
+    for i, cat in enumerate(CATEGORIES, start=1):
+        print(f"{i}) {cat}")
+
+    choice = input("선택: ").strip()
+    if not choice.isdigit() or not (1 <= int(choice) <= len(CATEGORIES)):
+        print("잘못된 입력입니다.")
+        return
+
+    category = CATEGORIES[int(choice) - 1]
+    filtered = [p for p in prompts if p["category"] == category]
+
+    print(f"\n[{category}] 카테고리 프롬프트:")
+    if not filtered:
+        print("해당 카테고리에 프롬프트가 없습니다.")
+        return
+
+    for i, p in enumerate(filtered, start=1):
+        star = " ⭐" if p["favorite"] else ""
+        print(f"{i}. {p['title']}{star}")
+
+    print(f"\n총 {len(filtered)}개의 프롬프트")
 
 
 def search_prompt(prompts):
