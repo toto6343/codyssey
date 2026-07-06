@@ -261,12 +261,35 @@ def show_top_viewed(prompts):
 
 
 
+# ------------------------------------------------------------
+# 11. JSON으로 저장 (보너스: 영속화)
+# ------------------------------------------------------------
 def save_to_json(prompts, filename=JSON_FILE):
-    pass
+    try:
+        with open(filename, "w", encoding="utf-8") as f:
+            json.dump(prompts, f, ensure_ascii=False, indent=2)
+        print(f"\n'{filename}' 파일로 저장되었습니다. (총 {len(prompts)}개)")
+    except OSError as e:
+        print(f"\n저장 중 오류가 발생했습니다: {e}")
 
 
+# ------------------------------------------------------------
+# 12. JSON 불러오기 (보너스: 영속화)
+# ------------------------------------------------------------
 def load_from_json(prompts, filename=JSON_FILE):
-    pass
+    if not os.path.exists(filename):
+        print(f"\n'{filename}' 파일이 존재하지 않습니다.")
+        return
+
+    try:
+        with open(filename, "r", encoding="utf-8") as f:
+            loaded = json.load(f)
+
+        prompts.clear()
+        prompts.extend(loaded)
+        print(f"\n'{filename}' 파일에서 {len(loaded)}개의 프롬프트를 불러왔습니다.")
+    except (OSError, json.JSONDecodeError) as e:
+        print(f"\n불러오는 중 오류가 발생했습니다: {e}")
 
 
 def export_markdown(prompts, export_dir=EXPORT_DIR):
