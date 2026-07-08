@@ -169,7 +169,23 @@ def show_by_category():
     for i, b in enumerate(result, start=1):
         star = " ⭐" if b["favorite"] else ""
         print(f"{i}. {b['title']}{star}")
-    print(f"\n총 {len(result)}개의 프롬프트(도서)")    
+    print(f"\n총 {len(result)}개의 프롬프트(도서)")
+    
+def search_prompt():
+    print("\n=== 도서 검색 ===")
+    keyword = input("검색어: ").strip()
+    if not keyword:
+        print("검색어를 입력해야 합니다.")
+        return
+    result = [b for b in books if keyword in b["title"] or keyword in b["content"]]
+    print("\n검색 결과:")
+    if not result:
+        print("검색 결과가 없습니다.")
+        return
+    for i, b in enumerate(result, start=1):
+        star = " ⭐" if b["favorite"] else ""
+        print(f"{i}. [{b['category']}] {b['title']}{star}")
+    print(f"\n{len(result)}개의 프롬프트를 찾았습니다.")    
 
 def main():
     while True:
