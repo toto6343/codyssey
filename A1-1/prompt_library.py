@@ -234,6 +234,39 @@ def show_favorites():
         print(f"{i}. [{b['category']}] {b['title']} ⭐")
     print(f"\n총 {len(result)}개의 즐겨찾기")
  
+def edit_prompt():
+    print("\n=== 도서 정보 수정 ===")
+    show_list()
+    if not books:
+        return
+    num = input("수정할 번호 입력: ").strip()
+    if not num.isdigit() or not (1 <= int(num) <= len(books)):
+        print("잘못된 번호입니다.")
+        return
+    b = books[int(num) - 1]
+    print("변경하지 않으려면 그냥 엔터를 누르세요.")
+    new_title = input(f"제목 ({b['title']}): ").strip()
+    new_content = input("내용 (엔터 시 유지): ").strip()
+    if new_title:
+        b["title"] = new_title
+    if new_content:
+        b["content"] = new_content
+    if input("카테고리를 다시 선택하시겠습니까? (y/n): ").strip().lower() == "y":
+        b["category"] = choose_category()
+    print("도서 정보가 수정되었습니다!")
+ 
+ 
+def delete_prompt():
+    print("\n=== 도서 폐기 (삭제) ===")
+    show_list()
+    if not books:
+        return
+    num = input("삭제할 번호 입력: ").strip()
+    if not num.isdigit() or not (1 <= int(num) <= len(books)):
+        print("잘못된 번호입니다.")
+        return
+    removed = books.pop(int(num) - 1)
+    print(f"'{removed['title']}' 도서를 폐기했습니다.")
 
 def main():
     while True:
