@@ -15,8 +15,8 @@
    ```
 2. 저장소를 내려받은 뒤 프로그램을 실행합니다.
    ```bash
-   git clone <이 저장소 URL>
-   cd <저장소 폴더>
+   git clone https://github.com/toto6343/codyssey.git
+   cd A1-1
    python3 prompt_library.py
    ```
 3. 실행 후 나타나는 메뉴에서 원하는 기능 번호를 입력하면 됩니다.
