@@ -103,5 +103,44 @@ def show_menu():
     print("0. 도서관 문 닫기 (종료)")
     return input("선택: ").strip()
 
+def choose_category():
+    print("\n분야(서가) 선택:")
+    for idx, cat in enumerate(CATEGORIES, start=1):
+        print(f"{idx}) {cat}")
+    print(f"{len(CATEGORIES) + 1}) 직접 입력")
+    choice = input("선택: ").strip()
+    if choice.isdigit():
+        num = int(choice)
+        if 1 <= num <= len(CATEGORIES):
+            return CATEGORIES[num - 1]
+        if num == len(CATEGORIES) + 1:
+            custom = input("카테고리 직접 입력: ").strip()
+            return custom if custom else "기타"
+    print("잘못된 선택입니다. '기타'로 등록합니다.")
+    return "기타"
+
+def add_prompt():
+    print("\n=== 신간 등록 (프롬프트 추가) ===")
+    title = input("제목: ").strip()
+    while not title:
+        title = input("제목을 입력해야 합니다. 다시 입력: ").strip()
+ 
+    content = input("내용: ").strip()
+    while not content:
+        content = input("내용을 입력해야 합니다. 다시 입력: ").strip()
+ 
+    category = choose_category()
+ 
+    books.append(
+        {
+            "title": title,
+            "content": content,
+            "category": category,
+            "favorite": False,
+            "views": 0,
+        }
+    )
+    print(f"\n'{title}' 도서가 서가에 등록되었습니다!")
+
 if __name__ == "__main__":
     pass
