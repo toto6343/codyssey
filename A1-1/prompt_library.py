@@ -355,4 +355,4 @@ def main():
             print("\n잘못된 번호입니다. 다시 선택해주세요.")
 
 if __name__ == "__main__":
-    pass
+    main()
