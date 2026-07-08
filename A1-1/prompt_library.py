@@ -292,7 +292,7 @@ def save_to_json():
     try:
         with open(DATA_FILE, "w", encoding="utf-8") as f:
             json.dump(books, f, ensure_ascii=False, indent=2)
-        print(f"\n'{DATA_FILE}' 파일로 도서관을 저장했습니다!")
+        print(f"\n'{DATA_FILE}' 파일로 도서관을 저장했습니다! (총 {len(books)}개)")
     except OSError as e:
         print(f"저장 중 오류가 발생했습니다: {e}")
 
@@ -306,6 +306,7 @@ def load_from_json():
         with open(DATA_FILE, "r", encoding="utf-8") as f:
             books = json.load(f)
         print(f"\n'{DATA_FILE}' 파일에서 도서관을 불러왔습니다!")
+        show_list()
     except (OSError, json.JSONDecodeError) as e:
         print(f"불러오기 중 오류가 발생했습니다: {e}")
 
