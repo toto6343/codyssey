@@ -142,5 +142,40 @@ def add_prompt():
     )
     print(f"\n'{title}' 도서가 서가에 등록되었습니다!")
 
+def main():
+    while True:
+        choice = show_menu()
+        if choice == "1":
+            add_prompt()
+        elif choice == "2":
+            show_list()
+        elif choice == "3":
+            show_by_category()
+        elif choice == "4":
+            search_prompt()
+        elif choice == "5":
+            show_detail()
+        elif choice == "6":
+            toggle_favorite()
+        elif choice == "7":
+            show_favorites()
+        elif choice == "8":
+            edit_prompt()
+        elif choice == "9":
+            delete_prompt()
+        elif choice == "10":
+            show_top_viewed()
+        elif choice == "11":
+            save_to_json()
+        elif choice == "12":
+            load_from_json()
+        elif choice == "13":
+            export_markdown_by_category()
+        elif choice == "0":
+            print("\n도서관 문을 닫습니다. 이용해주셔서 감사합니다!")
+            break
+        else:
+            print("\n잘못된 번호입니다. 다시 선택해주세요.")
+
 if __name__ == "__main__":
     pass
