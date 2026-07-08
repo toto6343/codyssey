@@ -187,6 +187,43 @@ def search_prompt():
         print(f"{i}. [{b['category']}] {b['title']}{star}")
     print(f"\n{len(result)}개의 프롬프트를 찾았습니다.")    
 
+def show_detail():
+    print("\n=== 도서 상세 열람 ===")
+    show_list()
+    if not books:
+        return
+    num = input("번호 입력: ").strip()
+    if not num.isdigit() or not (1 <= int(num) <= len(books)):
+        print("잘못된 번호입니다.")
+        return
+    b = books[int(num) - 1]
+    b["views"] += 1
+    star = "⭐" if b["favorite"] else "없음"
+    print("\n" + "─" * 30)
+    print(f"제목: {b['title']}")
+    print(f"카테고리: {b['category']}")
+    print(f"즐겨찾기: {star}")
+    print(f"조회수: {b['views']}회")
+    print("─" * 30)
+    print("내용:")
+    print(b["content"])
+    print("─" * 30)
+ 
+ 
+def toggle_favorite():
+    print("\n=== 추천 도서 등록/해제 ===")
+    show_list()
+    if not books:
+        return
+    num = input("프롬프트 번호 입력: ").strip()
+    if not num.isdigit() or not (1 <= int(num) <= len(books)):
+        print("잘못된 번호입니다.")
+        return
+    b = books[int(num) - 1]
+    b["favorite"] = not b["favorite"]
+    status = "추가" if b["favorite"] else "해제"
+    print(f"'{b['title']}' 프롬프트를 즐겨찾기에서 {status}했습니다!")
+
 def main():
     while True:
         choice = show_menu()
