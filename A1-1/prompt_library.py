@@ -141,6 +141,16 @@ def add_prompt():
         }
     )
     print(f"\n'{title}' 도서가 서가에 등록되었습니다!")
+    
+def show_list():
+    print("\n=== 전체 서가 보기 ===")
+    if not books:
+        print("서가에 등록된 도서가 없습니다.")
+        return
+    for i, b in enumerate(books, start=1):
+        star = " ⭐" if b["favorite"] else ""
+        print(f"{i}. [{b['category']}] {b['title']}{star}")
+    print(f"\n총 {len(books)}개의 프롬프트(도서)")
 
 def main():
     while True:
