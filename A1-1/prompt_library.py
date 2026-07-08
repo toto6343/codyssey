@@ -299,6 +299,26 @@ def load_from_json():
     except (OSError, json.JSONDecodeError) as e:
         print(f"불러오기 중 오류가 발생했습니다: {e}")
 
+def export_markdown_by_category():
+    print("\n=== 서가별 내보내기 (Markdown) ===")
+    if not books:
+        print("등록된 도서가 없습니다.")
+        return
+    os.makedirs(EXPORT_DIR, exist_ok=True)
+    exported = 0
+    for category in CATEGORIES:
+        items = [b for b in books if b["category"] == category]
+        if not items:
+            continue
+        filename = os.path.join(EXPORT_DIR, f"{category}.md")
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write(f"# {category} 서가\n\n")
+            for b in items:
+                star = " ⭐" if b["favorite"] else ""
+                f.write(f"## {b['title']}{star}\n\n{b['content']}\n\n")
+        exported += 1
+    print(f"'{EXPORT_DIR}' 폴더에 {exported}개의 서가 파일을 내보냈습니다!")
+
 def main():
     while True:
         choice = show_menu()
