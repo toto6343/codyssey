@@ -103,5 +103,79 @@ def show_menu():
     print("0. 도서관 문 닫기 (종료)")
     return input("선택: ").strip()
 
+def choose_category():
+    print("\n분야(서가) 선택:")
+    for idx, cat in enumerate(CATEGORIES, start=1):
+        print(f"{idx}) {cat}")
+    print(f"{len(CATEGORIES) + 1}) 직접 입력")
+    choice = input("선택: ").strip()
+    if choice.isdigit():
+        num = int(choice)
+        if 1 <= num <= len(CATEGORIES):
+            return CATEGORIES[num - 1]
+        if num == len(CATEGORIES) + 1:
+            custom = input("카테고리 직접 입력: ").strip()
+            return custom if custom else "기타"
+    print("잘못된 선택입니다. '기타'로 등록합니다.")
+    return "기타"
+
+def add_prompt():
+    print("\n=== 신간 등록 (프롬프트 추가) ===")
+    title = input("제목: ").strip()
+    while not title:
+        title = input("제목을 입력해야 합니다. 다시 입력: ").strip()
+ 
+    content = input("내용: ").strip()
+    while not content:
+        content = input("내용을 입력해야 합니다. 다시 입력: ").strip()
+ 
+    category = choose_category()
+ 
+    books.append(
+        {
+            "title": title,
+            "content": content,
+            "category": category,
+            "favorite": False,
+            "views": 0,
+        }
+    )
+    print(f"\n'{title}' 도서가 서가에 등록되었습니다!")
+
+def main():
+    while True:
+        choice = show_menu()
+        if choice == "1":
+            add_prompt()
+        elif choice == "2":
+            show_list()
+        elif choice == "3":
+            show_by_category()
+        elif choice == "4":
+            search_prompt()
+        elif choice == "5":
+            show_detail()
+        elif choice == "6":
+            toggle_favorite()
+        elif choice == "7":
+            show_favorites()
+        elif choice == "8":
+            edit_prompt()
+        elif choice == "9":
+            delete_prompt()
+        elif choice == "10":
+            show_top_viewed()
+        elif choice == "11":
+            save_to_json()
+        elif choice == "12":
+            load_from_json()
+        elif choice == "13":
+            export_markdown_by_category()
+        elif choice == "0":
+            print("\n도서관 문을 닫습니다. 이용해주셔서 감사합니다!")
+            break
+        else:
+            print("\n잘못된 번호입니다. 다시 선택해주세요.")
+
 if __name__ == "__main__":
     pass
