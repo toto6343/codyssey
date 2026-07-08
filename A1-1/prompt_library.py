@@ -103,6 +103,7 @@ def show_menu():
     print("0. 도서관 문 닫기 (종료)")
     return input("선택: ").strip()
 
+
 def choose_category():
     print("\n분야(서가) 선택:")
     for idx, cat in enumerate(CATEGORIES, start=1):
@@ -119,18 +120,19 @@ def choose_category():
     print("잘못된 선택입니다. '기타'로 등록합니다.")
     return "기타"
 
+
 def add_prompt():
     print("\n=== 신간 등록 (프롬프트 추가) ===")
     title = input("제목: ").strip()
     while not title:
         title = input("제목을 입력해야 합니다. 다시 입력: ").strip()
- 
+
     content = input("내용: ").strip()
     while not content:
         content = input("내용을 입력해야 합니다. 다시 입력: ").strip()
- 
+
     category = choose_category()
- 
+
     books.append(
         {
             "title": title,
@@ -141,7 +143,8 @@ def add_prompt():
         }
     )
     print(f"\n'{title}' 도서가 서가에 등록되었습니다!")
-    
+
+
 def show_list():
     print("\n=== 전체 서가 보기 ===")
     if not books:
@@ -151,7 +154,8 @@ def show_list():
         star = " ⭐" if b["favorite"] else ""
         print(f"{i}. [{b['category']}] {b['title']}{star}")
     print(f"\n총 {len(books)}개의 프롬프트(도서)")
-    
+
+
 def show_by_category():
     print("\n=== 분야별 서가 조회 ===")
     for idx, cat in enumerate(CATEGORIES, start=1):
@@ -170,7 +174,8 @@ def show_by_category():
         star = " ⭐" if b["favorite"] else ""
         print(f"{i}. {b['title']}{star}")
     print(f"\n총 {len(result)}개의 프롬프트(도서)")
-    
+
+
 def search_prompt():
     print("\n=== 도서 검색 ===")
     keyword = input("검색어: ").strip()
@@ -185,7 +190,8 @@ def search_prompt():
     for i, b in enumerate(result, start=1):
         star = " ⭐" if b["favorite"] else ""
         print(f"{i}. [{b['category']}] {b['title']}{star}")
-    print(f"\n{len(result)}개의 프롬프트를 찾았습니다.")    
+    print(f"\n{len(result)}개의 프롬프트를 찾았습니다.")
+
 
 def show_detail():
     print("\n=== 도서 상세 열람 ===")
@@ -208,8 +214,8 @@ def show_detail():
     print("내용:")
     print(b["content"])
     print("─" * 30)
- 
- 
+
+
 def toggle_favorite():
     print("\n=== 추천 도서 등록/해제 ===")
     show_list()
@@ -224,6 +230,7 @@ def toggle_favorite():
     status = "추가" if b["favorite"] else "해제"
     print(f"'{b['title']}' 프롬프트를 즐겨찾기에서 {status}했습니다!")
 
+
 def show_favorites():
     print("\n=== 추천 도서 서가 (즐겨찾기 목록) ===")
     result = [b for b in books if b["favorite"]]
@@ -233,7 +240,8 @@ def show_favorites():
     for i, b in enumerate(result, start=1):
         print(f"{i}. [{b['category']}] {b['title']} ⭐")
     print(f"\n총 {len(result)}개의 즐겨찾기")
- 
+
+
 def edit_prompt():
     print("\n=== 도서 정보 수정 ===")
     show_list()
@@ -254,8 +262,8 @@ def edit_prompt():
     if input("카테고리를 다시 선택하시겠습니까? (y/n): ").strip().lower() == "y":
         b["category"] = choose_category()
     print("도서 정보가 수정되었습니다!")
- 
- 
+
+
 def delete_prompt():
     print("\n=== 도서 폐기 (삭제) ===")
     show_list()
@@ -268,6 +276,7 @@ def delete_prompt():
     removed = books.pop(int(num) - 1)
     print(f"'{removed['title']}' 도서를 폐기했습니다.")
 
+
 def show_top_viewed():
     print("\n=== 인기 도서 TOP 목록 ===")
     if not books:
@@ -277,7 +286,8 @@ def show_top_viewed():
     for i, b in enumerate(ranked[:5], start=1):
         star = " ⭐" if b["favorite"] else ""
         print(f"{i}. [{b['category']}] {b['title']} - 조회수 {b['views']}회{star}")
- 
+
+
 def save_to_json():
     try:
         with open(DATA_FILE, "w", encoding="utf-8") as f:
@@ -285,8 +295,8 @@ def save_to_json():
         print(f"\n'{DATA_FILE}' 파일로 도서관을 저장했습니다!")
     except OSError as e:
         print(f"저장 중 오류가 발생했습니다: {e}")
- 
- 
+
+
 def load_from_json():
     global books
     if not os.path.exists(DATA_FILE):
@@ -298,6 +308,7 @@ def load_from_json():
         print(f"\n'{DATA_FILE}' 파일에서 도서관을 불러왔습니다!")
     except (OSError, json.JSONDecodeError) as e:
         print(f"불러오기 중 오류가 발생했습니다: {e}")
+
 
 def export_markdown_by_category():
     print("\n=== 서가별 내보내기 (Markdown) ===")
@@ -318,6 +329,7 @@ def export_markdown_by_category():
                 f.write(f"## {b['title']}{star}\n\n{b['content']}\n\n")
         exported += 1
     print(f"'{EXPORT_DIR}' 폴더에 {exported}개의 서가 파일을 내보냈습니다!")
+
 
 def main():
     while True:
@@ -353,6 +365,7 @@ def main():
             break
         else:
             print("\n잘못된 번호입니다. 다시 선택해주세요.")
+
 
 if __name__ == "__main__":
     main()
