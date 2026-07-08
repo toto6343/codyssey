@@ -1,15 +1,5 @@
-# 프로그램 실행 중 생성되는 데이터 파일 (개인 저장 데이터이므로 버전 관리 제외)
-prompts.json
-exports/
-
-# 파이썬 캐시
 __pycache__/
 *.pyc
-
-# 가상환경
-venv/
-.venv/
-
-# OS/에디터 관련
-.DS_Store
 .vscode/
+library_data.json
+exports/
