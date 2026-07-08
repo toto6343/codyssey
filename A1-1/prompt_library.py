@@ -268,6 +268,17 @@ def delete_prompt():
     removed = books.pop(int(num) - 1)
     print(f"'{removed['title']}' 도서를 폐기했습니다.")
 
+def show_top_viewed():
+    print("\n=== 인기 도서 TOP 목록 ===")
+    if not books:
+        print("등록된 도서가 없습니다.")
+        return
+    ranked = sorted(books, key=lambda b: b["views"], reverse=True)
+    for i, b in enumerate(ranked[:5], start=1):
+        star = " ⭐" if b["favorite"] else ""
+        print(f"{i}. [{b['category']}] {b['title']} - 조회수 {b['views']}회{star}")
+ 
+
 def main():
     while True:
         choice = show_menu()
