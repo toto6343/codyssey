@@ -141,6 +141,51 @@ def add_prompt():
         }
     )
     print(f"\n'{title}' 도서가 서가에 등록되었습니다!")
+    
+def show_list():
+    print("\n=== 전체 서가 보기 ===")
+    if not books:
+        print("서가에 등록된 도서가 없습니다.")
+        return
+    for i, b in enumerate(books, start=1):
+        star = " ⭐" if b["favorite"] else ""
+        print(f"{i}. [{b['category']}] {b['title']}{star}")
+    print(f"\n총 {len(books)}개의 프롬프트(도서)")
+    
+def show_by_category():
+    print("\n=== 분야별 서가 조회 ===")
+    for idx, cat in enumerate(CATEGORIES, start=1):
+        print(f"{idx}) {cat}")
+    choice = input("선택: ").strip()
+    if not choice.isdigit() or not (1 <= int(choice) <= len(CATEGORIES)):
+        print("잘못된 선택입니다.")
+        return
+    category = CATEGORIES[int(choice) - 1]
+    result = [b for b in books if b["category"] == category]
+    print(f"\n[{category}] 서가:")
+    if not result:
+        print("이 서가에는 등록된 도서가 없습니다.")
+        return
+    for i, b in enumerate(result, start=1):
+        star = " ⭐" if b["favorite"] else ""
+        print(f"{i}. {b['title']}{star}")
+    print(f"\n총 {len(result)}개의 프롬프트(도서)")
+    
+def search_prompt():
+    print("\n=== 도서 검색 ===")
+    keyword = input("검색어: ").strip()
+    if not keyword:
+        print("검색어를 입력해야 합니다.")
+        return
+    result = [b for b in books if keyword in b["title"] or keyword in b["content"]]
+    print("\n검색 결과:")
+    if not result:
+        print("검색 결과가 없습니다.")
+        return
+    for i, b in enumerate(result, start=1):
+        star = " ⭐" if b["favorite"] else ""
+        print(f"{i}. [{b['category']}] {b['title']}{star}")
+    print(f"\n{len(result)}개의 프롬프트를 찾았습니다.")    
 
 def main():
     while True:
