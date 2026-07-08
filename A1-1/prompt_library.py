@@ -224,6 +224,17 @@ def toggle_favorite():
     status = "추가" if b["favorite"] else "해제"
     print(f"'{b['title']}' 프롬프트를 즐겨찾기에서 {status}했습니다!")
 
+def show_favorites():
+    print("\n=== 추천 도서 서가 (즐겨찾기 목록) ===")
+    result = [b for b in books if b["favorite"]]
+    if not result:
+        print("즐겨찾기한 도서가 없습니다.")
+        return
+    for i, b in enumerate(result, start=1):
+        print(f"{i}. [{b['category']}] {b['title']} ⭐")
+    print(f"\n총 {len(result)}개의 즐겨찾기")
+ 
+
 def main():
     while True:
         choice = show_menu()
