@@ -278,6 +278,26 @@ def show_top_viewed():
         star = " ⭐" if b["favorite"] else ""
         print(f"{i}. [{b['category']}] {b['title']} - 조회수 {b['views']}회{star}")
  
+def save_to_json():
+    try:
+        with open(DATA_FILE, "w", encoding="utf-8") as f:
+            json.dump(books, f, ensure_ascii=False, indent=2)
+        print(f"\n'{DATA_FILE}' 파일로 도서관을 저장했습니다!")
+    except OSError as e:
+        print(f"저장 중 오류가 발생했습니다: {e}")
+ 
+ 
+def load_from_json():
+    global books
+    if not os.path.exists(DATA_FILE):
+        print(f"\n'{DATA_FILE}' 파일이 없습니다. 먼저 저장해주세요.")
+        return
+    try:
+        with open(DATA_FILE, "r", encoding="utf-8") as f:
+            books = json.load(f)
+        print(f"\n'{DATA_FILE}' 파일에서 도서관을 불러왔습니다!")
+    except (OSError, json.JSONDecodeError) as e:
+        print(f"불러오기 중 오류가 발생했습니다: {e}")
 
 def main():
     while True:
