@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FitRoutine — 지금 바로 시작하는 홈트 루틴</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<noscript><style>.reveal { opacity: 1 !important; transform: none !important; }</style></noscript>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a href="#home" class="nav__brand">FIT<span>ROUTINE</span></a>
+    <button class="nav__toggle" id="navToggle" aria-label="메뉴 열기" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav__links" id="navLinks">
+      <a href="#home" class="nav__link">홈</a>
+      <a href="#generator" class="nav__link">루틴 생성기</a>
+      <a href="#tips" class="nav__link">운동 팁</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- HOME -->
+  <section id="home" class="hero">
+    <div class="hero__dial" aria-hidden="true">
+      <svg viewBox="0 0 200 200" class="dial">
+        <circle cx="100" cy="100" r="88" class="dial__ring"></circle>
+        <circle cx="100" cy="100" r="88" class="dial__progress"></circle>
+        <line x1="100" y1="100" x2="100" y2="34" class="dial__hand"></line>
+        <circle cx="100" cy="100" r="5" class="dial__pivot"></circle>
+      </svg>
+    </div>
+    <p class="hero__eyebrow">00:00 — 준비 완료</p>
+    <h1 class="hero__title">헬스장 갈 시간 없이도,<br>지금 이 자리에서 시작.</h1>
+    <p class="hero__sub">목표와 시간만 고르면, AI가 순서대로 된 홈트레이닝 루틴을 그 자리에서 짜드려요.</p>
+    <a href="#generator" class="btn btn--primary">루틴 만들러 가기</a>
+  </section>
+
+  <!-- GENERATOR -->
+  <section id="generator" class="generator">
+    <p class="section__eyebrow">SET UP</p>
+    <h2 class="section__title">오늘의 조건을 고르세요</h2>
+
+    <form class="routine-form" id="routineForm" novalidate>
+      <fieldset class="field-group">
+        <legend>운동 목표</legend>
+        <div class="chip-group" id="goalGroup">
+          <button type="button" class="chip" data-value="근력">근력</button>
+          <button type="button" class="chip" data-value="유산소">유산소</button>
+          <button type="button" class="chip" data-value="스트레칭">스트레칭</button>
+        </div>
+      </fieldset>
+
+      <fieldset class="field-group">
+        <legend>가능한 시간</legend>
+        <div class="chip-group" id="durationGroup">
+          <button type="button" class="chip" data-value="15">15분</button>
+          <button type="button" class="chip" data-value="30">30분</button>
+          <button type="button" class="chip" data-value="60">60분</button>
+        </div>
+      </fieldset>
+
+      <p class="form-message" id="formMessage" role="status"></p>
+
+      <button type="submit" class="btn btn--primary btn--wide" id="submitBtn">
+        <span class="btn__label">루틴 생성하기</span>
+        <span class="btn__spinner" aria-hidden="true"></span>
+      </button>
+    </form>
+
+    <div class="result" id="result" hidden>
+      <div class="result__header">
+        <p class="section__eyebrow">TODAY'S ROUTINE</p>
+        <h3 class="result__title" id="resultTitle"></h3>
+      </div>
+      <ol class="result__list" id="resultList"></ol>
+    </div>
+  </section>
+
+  <!-- TIPS -->
+  <section id="tips" class="tips">
+    <p class="section__eyebrow">BEFORE YOU START</p>
+    <h2 class="section__title">운동 팁 &amp; 안내</h2>
+
+    <div class="tip-board">
+      <article class="tip-card reveal">
+        <p class="tip-card__num">01</p>
+        <h3>운동 전 5분 워밍업</h3>
+        <p>관절을 가볍게 돌리고 심박수를 서서히 올려주세요. 부상 위험이 크게 줄어듭니다.</p>
+      </article>
+      <article class="tip-card reveal">
+        <p class="tip-card__num">02</p>
+        <h3>통증과 근육통은 다릅니다</h3>
+        <p>날카롭거나 관절에서 느껴지는 통증이 있다면 즉시 멈추고 루틴 강도를 낮추세요.</p>
+      </article>
+      <article class="tip-card reveal">
+        <p class="tip-card__num">03</p>
+        <h3>물은 운동 전후로</h3>
+        <p>루틴 시작 전과 종료 후 충분한 수분 섭취를 잊지 마세요.</p>
+      </article>
+      <article class="tip-card reveal">
+        <p class="tip-card__num">04</p>
+        <h3>루틴이 마음에 안 든다면</h3>
+        <p>목표나 시간을 바꿔서 "루틴 생성하기"를 다시 눌러보세요. 매번 다른 조합이 나옵니다.</p>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>FitRoutine — AI 기반 홈트레이닝 루틴 생성 서비스 · KDT 웹 배포 과제</p>
+</footer>
+
+<script src="js/main.js"></script>
+<!-- 보너스: 방문자 분석 (Vercel Analytics). Vercel 프로젝트 설정에서 Analytics를 켜면 자동으로 수집이 시작됩니다. -->
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+# api/generate.py는 표준 라이브러리(json, os, urllib)만 사용하므로
+# 별도로 설치해야 하는 외부 패키지가 없습니다.

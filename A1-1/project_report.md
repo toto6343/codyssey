@@ -44,7 +44,8 @@
 
 7. 추천 도서 등록/해제 (즐겨찾기)
 
- ![추천 도서 등록/해제](screenshots/favorite_toggle.png)
+ ![추천 도서 해제](screenshots/favorite_add.png)
+ ![추천 도서 해제](screenshots/favorite_remove.png)
 
 8. 추천 도서 서가 (즐겨찾기 목록)
 
