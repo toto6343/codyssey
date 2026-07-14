@@ -270,9 +270,9 @@ def edit_prompt():
         print("잘못된 번호입니다.")
         return
     b = books[int(num) - 1]
-    print("변경하지 않으려면 그냥 엔터를 누르세요.")
+    print("변경하지 않으려면 그냥 엔터를 두 번 누르세요.")
     new_title = input(f"제목 ({b['title']}): ").strip()
-    new_content = input("내용 (엔터 시 유지): ").strip()
+    new_content = get_multiline_input("내용 (엔터 두 번 시 유지):")
     if new_title:
         b["title"] = new_title
     if new_content:
