@@ -127,9 +127,10 @@ def add_prompt():
     while not title:
         title = input("제목을 입력해야 합니다. 다시 입력: ").strip()
 
-    content = input("내용: ").strip()
+    content = get_multiline_input("내용:")
     while not content:
-        content = input("내용을 입력해야 합니다. 다시 입력: ").strip()
+        print("내용을 입력해야 합니다.")
+        content = get_multiline_input("내용:")
 
     category = choose_category()
 
@@ -143,6 +144,23 @@ def add_prompt():
         }
     )
     print(f"\n'{title}' 도서가 서가에 등록되었습니다!")
+
+def get_multiline_input(prompt_label):
+    print(f"{prompt_label} (여러 줄 입력 가능, 끝내려면 빈 줄에서 Enter 두 번)")
+    lines = []
+    empty_count = 0
+
+    while True:
+        line = input()
+        if line == "":
+            empty_count += 1
+            if empty_count >= 2:
+                break
+        else:
+            empty_count = 0
+            lines.append(line)
+
+    return "\n".join(lines).strip()
 
 
 def show_list():
