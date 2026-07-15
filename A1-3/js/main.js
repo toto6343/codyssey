@@ -1,7 +1,18 @@
 // ============================================================================
 // FitRoutine — main.js
-// 네비게이션 토글, 칩 선택 UI, /api/generate 호출, 실패 처리(빈값/오류/타임아웃)
+// 다크모드/라이트모드 토글, 네비게이션 토글, 칩 선택 UI, /api/generate 호출, 실패 처리(빈값/오류/타임아웃)
 // ============================================================================
+
+// --- 다크모드 / 라이트모드 토글 ---------------------------------------------
+const themeToggle = document.getElementById('themeToggle');
+const rootEl = document.documentElement;
+
+themeToggle.addEventListener('click', () => {
+  const isLight = rootEl.getAttribute('data-theme') === 'light';
+  const nextTheme = isLight ? 'dark' : 'light';
+  rootEl.setAttribute('data-theme', nextTheme);
+  localStorage.setItem('theme', nextTheme);
+});
 
 // --- 모바일 네비게이션 토글 -------------------------------------------------
 const navToggle = document.getElementById('navToggle');
