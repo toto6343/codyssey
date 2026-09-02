@@ -130,4 +130,6 @@ vercel --prod
 CLI가 몇 가지 질문(프로젝트 이름 등)을 물어보는데 기본값을 그대로 사용해도 됩니다.
 `vercel.json`이 있어 별도 빌드 설정 없이 `dashboard/index.html`이 배포됩니다.
 
+**배포 URL**: https://krwfxtrend.vercel.app/
+
 배포 후 발급된 URL을 REPORT.md 또는 제출 폼에 기재하면 됩니다.

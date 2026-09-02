@@ -190,5 +190,4 @@ jupyter nbconvert --to notebook --execute --inplace analysis.ipynb
 대시보드(보너스): `dashboard/index.html`을 브라우저로 열면 기간 슬라이더와
 통화 체크박스로 데이터를 탐색할 수 있다. (README.md §4 참고)
 
-**배포 URL (보너스 제출 옵션 1)**: Vercel로 배포함 — `https://YOUR-PROJECT.vercel.app`
-(README.md §4-2의 절차대로 배포 후 이 URL을 실제 발급된 주소로 교체할 것)
+**배포 URL (보너스 제출 옵션 1)**: Vercel로 배포함 — https://krwfxtrend.vercel.app/
