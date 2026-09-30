@@ -1,181 +1,196 @@
-# 🎬 주말 박스오피스 AI 비서
+# 🎟️ 주말극장 — 박스오피스 AI 비서
+🔗 **[서비스 바로가기](https://weekend-cinema-six.vercel.app)** · [Swagger UI](https://boxofficekr.onrender.com/docs)
 
-> KOBIS 주말 박스오피스 데이터를 분석·요약해서 GPT에 컨텍스트로 주입하고, **"내 데이터를 아는" AI와 대화**하는 웹 서비스
+KOBIS 주말 박스오피스 데이터를 분석해 요약하고, 그 요약을 GPT에게 주입해 **내 데이터를 아는 AI 비서**로 대화하는 웹 서비스입니다.
+일반 ChatGPT는 "지난 주말 박스오피스가 어땠어?"에 답하지 못하지만, 주말극장은 저장된 데이터의 기간·평균·최고/최저·트렌드·전년 동기 대비를 근거로 답합니다.
 
-## 1. 서비스 소개
+## 배포 URL
 
-일반적인 챗봇은 "최근 주말 극장가 어때?"라고 물어도 실제 데이터를 모르기 때문에 일반론만 답합니다.
-이 서비스는 KOBIS(영화진흥위원회) 주말 박스오피스 약 120주치를 Firestore에 저장하고, 기간·평균·최고/최저·최근 추세·전년 동기 대비를 계산한 **요약**을 시스템 프롬프트에 넣어 데이터에 근거한 답변을 만듭니다.
-
-- 💬 **데이터 기반 AI 채팅** (로딩 표시, 대화 자동 저장)
-- 🗂 **데이터 관리** (추가 / 조회 / 수정 / 삭제)
-- 🕘 **대화 기록** (목록 조회, 불러오기, 삭제)
-- 🔄 **최신 데이터 동기화** (버튼 한 번으로 KOBIS의 새 주말 데이터 추가)
-- 📊 **데이터 요약** (기간, 개수, 평균, 최고, 최근 4주 트렌드, 전년 동기 대비)
-
-> 데이터 기준: 각 주말(금~일) 박스오피스 **상위 10편의 관객수 합계**입니다. (KOBIS API가 조회당 최대 10편을 반환)
-
-## 2. 기술 스택
-
-| 영역 | 사용 기술 |
-|---|---|
-| Backend | Python 3.10+, FastAPI, Pydantic, Uvicorn |
-| Database | Firebase Firestore (`data`, `conversations`) |
-| AI | OpenAI Chat Completions API |
-| Frontend | HTML / CSS / JavaScript (프레임워크 없음) |
-| 배포 | Render (Backend), Vercel (Frontend) |
-| 데이터 | KOBIS 오픈API `searchWeeklyBoxOfficeList` (`weekGb=1`, 주말) |
-
-## 3. 배포 URL
+## 배포 URL
 
 | 구분 | URL |
 |---|---|
-| Frontend (Vercel) | `https://<your-app>.vercel.app` ← 배포 후 입력 |
-| Backend API (Render) | `https://<your-api>.onrender.com` ← 배포 후 입력 |
-| Swagger UI | `https://<your-api>.onrender.com/docs` ← 배포 후 입력 |
+| 프론트엔드 (Vercel) | https://weekend-cinema-six.vercel.app |
+| 백엔드 API (Render) | https://boxofficekr.onrender.com |
+| Swagger UI | https://boxofficekr.onrender.com/docs |
+| 헬스체크 | https://boxofficekr.onrender.com/health |
 
-> ⏳ 백엔드는 Render 무료 티어라 **첫 요청 시 최대 1분 정도 지연**(콜드스타트)될 수 있습니다. 프론트엔드가 접속 즉시 `/health`를 호출해 서버를 깨우고 안내 문구를 보여줍니다.
+> 백엔드는 Render 무료 티어라 오랜 시간 접속이 없으면 잠들고, **첫 요청은 최대 1분** 걸릴 수 있습니다. 화면에 안내 문구가 표시됩니다.
 
-## 4. 동작 원리 (컨텍스트 주입)
+## 기술 스택
+
+| 영역 | 사용 기술 |
+|---|---|
+| 백엔드 | Python, FastAPI, Pydantic |
+| DB | Firebase Firestore (`data`, `conversations` 컬렉션) |
+| AI | OpenAI GPT API (컨텍스트 주입 + Function Calling) |
+| 데이터 | KOBIS 주말 박스오피스 (금~일 상위 10편 관객수 합계) |
+| 프론트엔드 | HTML / CSS / JavaScript (프레임워크 없음), Chart.js |
+| 외부 채널 | MCP Server (Python `mcp`) |
+| 배포 | Render (백엔드), Vercel (프론트엔드) |
+
+## 주요 기능
+
+- **데이터 기반 AI 채팅**: 데이터 요약을 시스템 프롬프트에 주입, 로딩 표시, 대화 자동 저장
+- **데이터 관리(CRUD)**: 날짜·관객수·메모 추가/수정/삭제, KOBIS 최신 데이터 동기화
+- **대화 기록**: 대화 목록 조회, 이전 대화 불러오기, 삭제
+- **데이터 요약**: 기간, 개수, 평균/최고/최저, 최근 4주 트렌드, 전년 동기 대비, TOP 5
+- **보너스**: Function Calling, MCP 연동, 추가 통계와 그래프, CSV/JSON 내보내기, 다크/라이트 모드
+
+## 프로젝트 구조
+
+```
+backend/
+  app/
+    main.py            # FastAPI 앱, CORS, 예외 핸들러
+    config.py          # 환경변수 설정
+    firebase.py        # Firestore 클라이언트
+    schemas.py         # Pydantic 요청/응답 모델
+    routers/           # data, conversations, chat
+    services/          # data, conversation, chat, tools, summary, kobis
+  mcp_server.py        # MCP Server (외부 채널)
+  requirements.txt
+frontend/
+  public/              # index.html, style.css, app.js
+  build.js             # 배포 시 config.js 생성
+scripts/               # 데이터 수집 스크립트
+```
+
+**라우터/서비스 분리 기준**: 라우터는 HTTP 요청·응답 형식만 다루고, 비즈니스 로직과 Firestore 접근은 서비스가 담당합니다. 그래서 채팅 서비스가 HTTP 재호출 없이 데이터 서비스 함수를 직접 사용할 수 있습니다.
+
+## API 요약
+
+| 메서드 | 경로 | 설명 |
+|---|---|---|
+| POST | `/api/data` | 데이터 추가 |
+| GET | `/api/data` | 목록 조회 |
+| PUT | `/api/data/{id}` | 수정 |
+| DELETE | `/api/data/{id}` | 삭제 |
+| GET | `/api/data/summary` | 요약 (프롬프트 주입용) |
+| GET | `/api/data/statistics` | 추가 통계 (보너스) |
+| GET | `/api/data/export?format=csv\|json` | 내보내기 (보너스) |
+| POST | `/api/data/sync` | KOBIS 최신 데이터 동기화 |
+| POST | `/api/conversations` | 대화 저장 |
+| GET | `/api/conversations` | 대화 목록 (messages 미포함) |
+| GET | `/api/conversations/{id}` | 특정 대화 전체 메시지 |
+| DELETE | `/api/conversations/{id}` | 대화 삭제 |
+| POST | `/api/chat` | AI 대화 (컨텍스트 주입 + 도구 호출 + 자동 저장) |
+
+## 컨텍스트 주입 원리
+
+1. `GET /api/data/summary`와 같은 요약을 서비스 함수로 계산합니다.
+2. 요약(기간, 개수, 지표, 트렌드 등)을 시스템 프롬프트 템플릿에 채워 넣습니다.
+3. 시스템 프롬프트 + 최근 대화 + 사용자 질문을 GPT에 전달합니다.
+4. 답변을 `conversations`에 자동 저장합니다.
+
+데이터가 프롬프트에 들어 있으므로 GPT는 요약 범위 밖의 내용은 추측하지 않고 "제공된 데이터로는 알 수 없어요"라고 답하도록 규칙을 두었습니다.
+
+## 로컬 실행
+
+```bash
+# 백엔드
+cd backend
+python -m venv venv
+venv\Scripts\activate          # macOS/Linux: source venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env           # 값 채우기
+uvicorn app.main:app --reload  # http://localhost:8000/docs
+
+# 프론트엔드: frontend/public 을 Live Server 등으로 열기 (기본 포트 5500)
+```
+
+## 환경 변수
+
+**백엔드 (Render)**
+
+| 이름 | 설명 |
+|---|---|
+| `OPENAI_API_KEY` | OpenAI API 키 |
+| `KOBIS_API_KEY` | KOBIS 오픈API 키 |
+| `FIREBASE_SERVICE_ACCOUNT_JSON` | 서비스 계정 키(JSON 문자열 또는 파일 경로) |
+| `ALLOWED_ORIGINS` | CORS 허용 도메인, 콤마로 구분 |
+| `OPENAI_MODEL` (선택) | 기본 `gpt-4o-mini` |
+| `CHAT_MAX_TOKENS` (선택) | 기본 500 |
+
+**프론트엔드 (Vercel)**
+
+| 이름 | 설명 |
+|---|---|
+| `API_BASE_URL` | 백엔드 주소 (빌드 시 `config.js`로 주입) |
+
+> API 키는 서버에만 두고 코드·프론트에 노출하지 않습니다. 프론트에는 공개되어도 되는 백엔드 주소만 넣습니다.
+
+---
+
+## 보너스 1. AI 도구 호출 (Function Calling) + MCP 연동
+
+### 정의한 도구
+
+| 도구 | 언제 호출되는가 |
+|---|---|
+| `get_data_summary` | 기간·평균·최고/최저·트렌드를 최신 상태로 확인해야 할 때 |
+| `get_statistics` | 월별 통계, 표준편차, 직전 주 대비, 이동평균 질문일 때 |
+| `list_conversations` | 이전 대화가 있었는지 물어볼 때 |
+| `get_conversation` | 특정 이전 대화의 내용을 물어볼 때 |
+
+모든 도구에는 `reason` 파라미터가 필수입니다. 모델이 **호출 이유를 직접 적게 해서** 근거를 남기고, 응답의 `tool_calls`에 담겨 채팅 화면에 🔧로 표시됩니다.
+
+### 호출 흐름
 
 ```
 사용자 질문
-   │
-   ▼
-POST /api/chat
-   ├─ 1) Firestore data 조회 → 요약 계산 (기간/평균/최고/트렌드/전년 대비/TOP5)
-   ├─ 2) 요약을 시스템 프롬프트 템플릿에 삽입   ← 컨텍스트 주입
-   ├─ 3) (이어 말하기면) 이전 대화 최근 10개 + 질문과 함께 GPT 호출
-   └─ 4) 질문/답변을 conversations에 자동 저장
+  → /api/chat: 요약을 시스템 프롬프트에 주입 후 GPT 호출
+  → GPT가 요약만으로 부족하다고 판단하면 tool_call 결정 (reason 포함)
+  → 서버가 도구 실행 (Firestore 조회, 서비스 함수 직접 호출)
+  → 결과를 tool 메시지로 GPT에 전달 (최대 3회 반복)
+  → 최종 답변 + tool_calls 반환, 대화 자동 저장
 ```
 
-GPT는 학습된 지식이 아니라 **요청마다 주입되는 요약**을 근거로 답합니다. 프롬프트에 "요약에 없는 내용은 추측하지 말고 모른다고 답하라"는 규칙을 넣어 환각을 줄였습니다.
+### 호출 근거 예시
 
-## 5. 프로젝트 구조
+⚠️ 아래 표를 **실제로 테스트한 결과**로 채우세요 (질문, 호출된 도구, reason 캡처).
 
-```
-.
-├── backend/
-│   ├── app/
-│   │   ├── main.py              # 앱 초기화, CORS, 예외 핸들러
-│   │   ├── config.py            # 환경변수
-│   │   ├── firebase.py          # Firestore 연결
-│   │   ├── schemas.py           # Pydantic 요청/응답 검증
-│   │   ├── routers/             # HTTP 계층 (data, conversations, chat)
-│   │   └── services/            # 비즈니스 로직 (summary, data, conversation, chat)
-│   └── requirements.txt
-├── frontend/
-│   ├── public/                  # index.html, style.css, app.js, config.js
-│   ├── build.js                 # Vercel 빌드 시 API_BASE_URL → config.js 주입
-│   └── vercel.json
-├── scripts/collect_weekend_boxoffice.py   # KOBIS → Firestore 1회성 수집
-└── render.yaml                  # Render Blueprint
-```
-
-**분리 기준**: 라우터는 요청 검증·응답 변환(HTTP)만, 서비스는 데이터 처리·외부 API 호출(로직)만 담당합니다. 요약 계산(`summary_service`)은 외부 의존성이 없는 순수 함수라 단독 테스트가 쉽습니다.
-
-## 6. API 목록
-
-| Method | Path | 설명 |
+| 질문 | 호출된 도구 | 근거(reason) |
 |---|---|---|
-| POST | `/api/data` | 데이터 추가 (문서 ID = 날짜, 중복 시 409) |
-| POST | `/api/data/sync` | KOBIS에서 최근 N주(기본 8, 최대 12)를 가져와 **없는 날짜만** 추가 |
-| GET | `/api/data` | 데이터 목록 |
-| PUT | `/api/data/{id}` | 데이터 수정 (value, memo) |
-| DELETE | `/api/data/{id}` | 데이터 삭제 |
-| GET | `/api/data/summary` | 데이터 요약 (프롬프트 주입용) |
-| POST | `/api/conversations` | 대화 저장 |
-| GET | `/api/conversations` | 대화 목록 (**messages 미포함**, `message_count` 제공) |
-| GET | `/api/conversations/{id}` | 특정 대화 전체 messages 조회 |
-| DELETE | `/api/conversations/{id}` | 대화 삭제 |
-| POST | `/api/chat` | AI 대화 (요약 주입 + 자동 저장) |
-| GET | `/health` | 헬스체크 |
+| "월별로 평균 관객이 어떻게 달라?" | `get_statistics` | ⚠️ 화면에 표시된 reason |
+| "지난주보다 얼마나 늘었어?" | ⚠️ | ⚠️ |
+| "예전에 무슨 얘기 했었지?" | ⚠️ | ⚠️ |
+| "최근 트렌드가 뭐야?" | 호출 없음 | 프롬프트 요약에 이미 있어 도구 불필요 |
 
-요약 응답 예시:
+> 마지막 행처럼 **필요할 때만 호출된다**는 점을 함께 보여주는 것이 좋습니다.
 
-```json
-{
-  "period": "2024-06-14 ~ 2026-09-25",
-  "count": 120,
-  "metrics": { "total": 2162000000, "average": 18018706, "max": 29740000, "max_date": "2026-05-08", "...": "..." },
-  "latest": { "date": "2026-09-25", "value": 8510000, "memo": "1위: ..." },
-  "trend": "최근 4주 평균이 직전 4주 대비 -4.7% (유지)",
-  "yoy": "작년 같은 시기(최근 4주 기준) 대비 -9.0% (하락)"
-}
+### MCP Server 연동 (외부 채널)
+
+`backend/mcp_server.py`가 배포된 REST API를 MCP 도구(`get_data_summary`, `get_statistics`, `list_conversations`, `get_conversation`)로 노출합니다. 내부 로직을 중복 구현하지 않고 같은 API를 재사용합니다.
+
+```
+Claude Desktop (MCP 클라이언트) → mcp_server.py (stdio) → Render API → Firestore
 ```
 
-## 7. 로컬 실행 방법
+- 검증 방법: Claude Desktop 설정(`claude_desktop_config.json`)에 등록하고 "박스오피스 월별 통계 알려줘" 요청
+- ⚠️ 호출 캡처: `docs/mcp-call.png` (아직 캡처 전이라면 반드시 찍어서 추가)
 
-### 사전 준비
-- Python 3.10+, Node.js(선택, 빌드 스크립트 확인용)
-- Firebase 프로젝트 + Firestore Database + 서비스 계정 키(JSON)
-- OpenAI API 키, KOBIS 오픈API 키
+## 보너스 2. 인사이트·UX 고도화
 
-### 1) 백엔드
-```bash
-cd backend
-python -m venv venv
-source venv\Scripts\Activate.ps1        
-pip install -r requirements.txt
-cp .env.example .env              # 값 채우기
-uvicorn app.main:app --reload     # http://localhost:8000/docs
-```
+- **추가 지표**: `/api/data/statistics`에서 중앙값, 표준편차, 직전 주 대비 증감률, 월별 통계, 4주 이동평균 제공
+- **시각화**: Chart.js 라인 그래프(주말 관객수 + 4주 이동평균)
+- **내보내기**: 데이터 관리 탭에서 CSV/JSON 다운로드 (CSV는 엑셀에서 한글이 깨지지 않도록 UTF-8 BOM 포함)
+- **다크/라이트 모드**: 헤더 토글, 선택값은 브라우저에 저장, 그래프 색상도 함께 전환
 
-### 2) 데이터 수집 (최초 1회)
-`backend/.env`에 `KOBIS_API_KEY`와 Firebase 키를 채워 둔 상태에서, backend 가상환경을 켠 채 프로젝트 루트에서 실행합니다.
-```bash
-python scripts/collect_weekend_boxoffice.py --weeks 120 --dry-run   # data.json만 생성해 확인
-python scripts/collect_weekend_boxoffice.py --weeks 120             # Firestore 적재
-```
-이후 새 주말 데이터는 웹 화면 **데이터 관리 → 🔄 최신 데이터 가져오기** 버튼으로 추가합니다. (이미 있는 날짜는 건너뛰어 수정한 메모가 보존됩니다.)
+## 제출 스크린샷
 
-### 3) 프론트엔드
-```bash
-cd frontend/public
-python -m http.server 5500        # http://localhost:5500
-```
-`config.js`의 기본 API 주소는 `http://localhost:8000`이고, 백엔드 기본 CORS 허용 목록에 `http://localhost:5500`이 포함돼 있습니다.
+⚠️ 파일을 `docs/` 폴더에 넣고 경로를 맞추세요.
 
-## 8. 환경 변수 목록
-
-### Backend (Render)
-| 이름 | 필수 | 설명 |
-|---|---|---|
-| `OPENAI_API_KEY` | ✅ | OpenAI API 키 |
-| `FIREBASE_SERVICE_ACCOUNT_JSON` | ✅ | 서비스 계정 키 JSON **한 줄 문자열** (또는 로컬 파일 경로) |
-| `KOBIS_API_KEY` | ✅ | KOBIS 오픈API 키 (동기화 버튼, 수집 스크립트) |
-| `ALLOWED_ORIGINS` | ✅ | CORS 허용 도메인, 쉼표 구분·슬래시 없이 (예: `https://your-app.vercel.app`) |
-| `OPENAI_MODEL` | | 기본 `gpt-4o-mini` |
-| `CHAT_MAX_TOKENS` | | 응답 최대 토큰, 기본 500 |
-| `CHAT_MAX_HISTORY` | | 프롬프트에 넣을 이전 메시지 수, 기본 10 |
-
-### Frontend (Vercel)
-| 이름 | 필수 | 설명 |
-|---|---|---|
-| `API_BASE_URL` | ✅ | 백엔드 주소 (예: `https://your-api.onrender.com`). 빌드 시 `config.js`로 주입 |
-
-### 데이터 수집 스크립트
-`scripts/collect_weekend_boxoffice.py`는 `backend/.env`의 값(`KOBIS_API_KEY`, `FIREBASE_SERVICE_ACCOUNT_JSON`)을 자동으로 읽습니다. 별도 `export`가 필요 없습니다.
-
-> 🔐 API 키와 서비스 계정 키는 코드/저장소에 넣지 않고 환경변수로만 관리합니다. 서비스 계정 키는 CORS로 보호되지 않는 서버 측 비밀이므로 프론트엔드에는 절대 두지 않습니다.
-
-## 9. 배포 방법
-
-1. **백엔드 (Render)**: GitHub에 푸시 → Render에서 Blueprint(`render.yaml`) 또는 Web Service로 생성 → 환경변수 4개(`OPENAI_API_KEY`, `FIREBASE_SERVICE_ACCOUNT_JSON`, `ALLOWED_ORIGINS`, `KOBIS_API_KEY`) 입력 → `/docs` 접속 확인
-2. **프론트엔드 (Vercel)**: 프로젝트 Import → **Root Directory를 `frontend`로 지정** → 환경변수 `API_BASE_URL`에 Render 주소 입력 → 배포
-3. **CORS 마무리**: Vercel 배포 URL을 Render의 `ALLOWED_ORIGINS`에 넣고 재배포
-
-## 10. 제출 스크린샷
-
-| 화면 | 이미지 |
+| 화면 | 파일 |
 |---|---|
-| 데이터 요약이 보이는 채팅 화면 (질문+답변 포함) | `docs/screenshot-chat.png` |
-| 데이터 관리 화면 (CRUD 중 1개 동작) | `docs/screenshot-data.png` |
-| 대화 기록 화면 (불러오기 동작) | `docs/screenshot-history.png` |
+| 데이터 요약이 보이는 채팅 (질문+답변) | `docs/chat.png` |
+| 데이터 관리 (CRUD 동작) | `docs/data.png` |
+| 대화 기록 (불러오기 동작) | `docs/history.png` |
+| 그래프 + 추가 지표 | `docs/chart.png` |
+| 다크 / 라이트 모드 | `docs/theme.png` |
+| 도구 호출 표시(🔧)가 있는 답변 | `docs/tool-call.png` |
+| MCP 호출 | `docs/mcp-call.png` |
 
-## 11. 한계 및 참고
-
-- 상위 10편 합계 기준이라 실제 전체 관객수와 차이가 있을 수 있습니다.
-- 요약에 없는 정보(월별 평균, 특정 영화의 상세 성적 등)는 AI가 "알 수 없다"고 답합니다.
-- 동기화 API는 인증이 없어 URL을 아는 사람이 호출할 수 있습니다. 주 수 상한(12)과 20초 쿨다운으로 남용을 줄였고, 실서비스라면 인증을 추가해야 합니다.
-- OpenAI 호출은 과금이 발생하므로 `max_tokens`와 입력 길이(1,000자) 제한을 두었습니다.
+```markdown
+![채팅](docs/chat.png)
+```
