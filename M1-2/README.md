@@ -1,10 +1,11 @@
 # 🎟️ 주말극장 — 박스오피스 AI 비서
+
 🔗 **[서비스 바로가기](https://weekend-cinema-six.vercel.app)** · [Swagger UI](https://boxofficekr.onrender.com/docs)
 
 KOBIS 주말 박스오피스 데이터를 분석해 요약하고, 그 요약을 GPT에게 주입해 **내 데이터를 아는 AI 비서**로 대화하는 웹 서비스입니다.
 일반 ChatGPT는 "지난 주말 박스오피스가 어땠어?"에 답하지 못하지만, 주말극장은 저장된 데이터의 기간·평균·최고/최저·트렌드·전년 동기 대비를 근거로 답합니다.
 
-## 배포 URL
+![채팅](docs/chat.png)
 
 ## 배포 URL
 
@@ -54,6 +55,7 @@ frontend/
   public/              # index.html, style.css, app.js
   build.js             # 배포 시 config.js 생성
 scripts/               # 데이터 수집 스크립트
+docs/                  # 제출 스크린샷
 ```
 
 **라우터/서비스 분리 기준**: 라우터는 HTTP 요청·응답 형식만 다루고, 비즈니스 로직과 Firestore 접근은 서비스가 담당합니다. 그래서 채팅 서비스가 HTTP 재호출 없이 데이터 서비스 함수를 직접 사용할 수 있습니다.
@@ -76,6 +78,10 @@ scripts/               # 데이터 수집 스크립트
 | DELETE | `/api/conversations/{id}` | 대화 삭제 |
 | POST | `/api/chat` | AI 대화 (컨텍스트 주입 + 도구 호출 + 자동 저장) |
 
+전체 명세는 [Swagger UI](https://boxofficekr.onrender.com/docs)에서 확인할 수 있습니다.
+
+![Swagger UI](docs/swagger.png)
+
 ## 컨텍스트 주입 원리
 
 1. `GET /api/data/summary`와 같은 요약을 서비스 함수로 계산합니다.
@@ -84,6 +90,16 @@ scripts/               # 데이터 수집 스크립트
 4. 답변을 `conversations`에 자동 저장합니다.
 
 데이터가 프롬프트에 들어 있으므로 GPT는 요약 범위 밖의 내용은 추측하지 않고 "제공된 데이터로는 알 수 없어요"라고 답하도록 규칙을 두었습니다.
+
+## 데이터 관리와 대화 기록
+
+**데이터 관리 (CRUD)** — 추가·수정·삭제 후 성공 메시지와 갱신된 목록이 표시됩니다.
+
+![데이터 관리](docs/data.png)
+
+**대화 기록** — 저장된 대화 목록에서 하나를 눌러 채팅 화면으로 다시 불러올 수 있습니다.
+
+![대화 기록](docs/history.png)
 
 ## 로컬 실행
 
@@ -148,16 +164,17 @@ uvicorn app.main:app --reload  # http://localhost:8000/docs
 
 ### 호출 근거 예시
 
-⚠️ 아래 표를 **실제로 테스트한 결과**로 채우세요 (질문, 호출된 도구, reason 캡처).
-
 | 질문 | 호출된 도구 | 근거(reason) |
 |---|---|---|
-| "월별로 평균 관객이 어떻게 달라?" | `get_statistics` | ⚠️ 화면에 표시된 reason |
-| "지난주보다 얼마나 늘었어?" | ⚠️ | ⚠️ |
-| "예전에 무슨 얘기 했었지?" | ⚠️ | ⚠️ |
-| "최근 트렌드가 뭐야?" | 호출 없음 | 프롬프트 요약에 이미 있어 도구 불필요 |
+| "월별로 평균 관객이 어떻게 달라?" | `get_statistics` | 월별 평균 관객 수 변화를 확인하기 위해 |
+| "지난주보다 얼마나 늘었어?" | `get_statistics` | 직전 주 대비 증감률을 확인하기 위해 |
+| "표준편차랑 중앙값 알려줘" | `get_statistics` | 월별 평균 관객 수의 표준편차와 중앙값을 확인하기 위해서 |
+| "예전에 무슨 얘기 했었지?" | `list_conversations` → `get_conversation` | 이전 대화 내용을 확인하기 위해 / 이전 대화의 내용을 확인하기 위해 |
+| "가장 흥행한 주말은 언제였어?" | 호출 없음 | 프롬프트 요약에 이미 있어 도구 불필요 |
 
-> 마지막 행처럼 **필요할 때만 호출된다**는 점을 함께 보여주는 것이 좋습니다.
+마지막 행처럼 **필요할 때만 호출**됩니다.
+
+![도구 호출](docs/tool-call.png)
 
 ### MCP Server 연동 (외부 채널)
 
@@ -168,7 +185,8 @@ Claude Desktop (MCP 클라이언트) → mcp_server.py (stdio) → Render API �
 ```
 
 - 검증 방법: Claude Desktop 설정(`claude_desktop_config.json`)에 등록하고 "박스오피스 월별 통계 알려줘" 요청
-- ⚠️ 호출 캡처: `docs/mcp-call.png` (아직 캡처 전이라면 반드시 찍어서 추가)
+
+![MCP 호출](docs/mcp-call.png)
 
 ## 보너스 2. 인사이트·UX 고도화
 
@@ -177,20 +195,21 @@ Claude Desktop (MCP 클라이언트) → mcp_server.py (stdio) → Render API �
 - **내보내기**: 데이터 관리 탭에서 CSV/JSON 다운로드 (CSV는 엑셀에서 한글이 깨지지 않도록 UTF-8 BOM 포함)
 - **다크/라이트 모드**: 헤더 토글, 선택값은 브라우저에 저장, 그래프 색상도 함께 전환
 
-## 제출 스크린샷
+![그래프와 지표](docs/chart.png)
 
-⚠️ 파일을 `docs/` 폴더에 넣고 경로를 맞추세요.
+![다크/라이트 모드](docs/theme.png)
+
+## 제출 스크린샷 목록
+
+모든 화면은 배포본(Vercel/Render)에서 캡처했습니다.
 
 | 화면 | 파일 |
 |---|---|
-| 데이터 요약이 보이는 채팅 (질문+답변) | `docs/chat.png` |
+| 데이터 요약 + 질문/답변 채팅 | `docs/chat.png` |
 | 데이터 관리 (CRUD 동작) | `docs/data.png` |
 | 대화 기록 (불러오기 동작) | `docs/history.png` |
+| Swagger UI | `docs/swagger.png` |
 | 그래프 + 추가 지표 | `docs/chart.png` |
 | 다크 / 라이트 모드 | `docs/theme.png` |
 | 도구 호출 표시(🔧)가 있는 답변 | `docs/tool-call.png` |
-| MCP 호출 | `docs/mcp-call.png` |
-
-```markdown
-![채팅](docs/chat.png)
-```
+| MCP 호출 (Claude Desktop) | `docs/mcp-call.png` |
