@@ -1,0 +1,32 @@
+# Render Blueprint: 저장소 루트에 두고 Render 대시보드 > New > Blueprint 로 연결
+services:
+  - type: web
+    name: boxoffice-ai-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+      - key: CHAT_MAX_TOKENS
+        value: "500"
+      - key: CHAT_MAX_HISTORY
+        value: "10"
+      # 아래 4개는 비밀/환경 값이라 저장소에 넣지 않고 대시보드에서 직접 입력
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: FIREBASE_SERVICE_ACCOUNT_JSON
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false
+      - key: KOBIS_API_KEY
+        sync: false
+      - key: OPENAI_BASE_URL
+        value: https://openrouter.ai/api/v1
+      - key: OPENAI_MODEL
+        value: openai/gpt-4o-mini

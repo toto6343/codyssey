@@ -1,0 +1,33 @@
+# 비밀 값 (절대 커밋 금지)
+.env
+.env.*
+!.env.example
+service-account*.json
+*firebase-adminsdk*.json
+serviceAccountKey*.json
+secrets/          # ← 추가: 키 파일을 직접 이름 지어 저장한 경우 대비
+
+# 수집 스크립트 결과물
+data.json
+
+# Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/      # ← 추가
+.ruff_cache/      # ← 추가
+*.egg-info/       # ← 추가
+
+# 배포/도구
+.vercel/
+node_modules/
+*.log             # ← 추가: uvicorn 등 로그
+
+# OS / 에디터
+.DS_Store
+Thumbs.db
+desktop.ini       # ← 추가
+.vscode/
+.idea/

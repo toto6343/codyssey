@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>주말극장 · 박스오피스 AI 비서</title>
+  <meta name="description" content="KOBIS 주말 박스오피스 데이터를 아는 AI 영화 비서, 주말극장" />
+  <meta name="theme-color" content="#170c1c" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet" />
+  <!-- [추가] 저장된 테마를 깜빡임 없이 적용 -->
+  <script>
+    (function () {
+      try { document.documentElement.dataset.theme = localStorage.getItem("theme") === "light" ? "light" : "dark"; }
+      catch (e) { document.documentElement.dataset.theme = "dark"; }
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">🎟️</span>
+      <div>
+        <h1>주말극장</h1>
+        <p class="tagline">박스오피스 데이터를 아는 AI 영화 비서</p>
+      </div>
+    </div>
+    <!-- [변경] 서버 상태 + 테마 토글 -->
+    <div class="top-right">
+      <span id="serverStatus" class="pill">서버 확인 중…</span>
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="테마 전환">🌙</button>
+    </div>
+  </header>
+
+  <div id="notice" class="notice" hidden>
+    ⏳ 무료 서버가 잠에서 깨어나는 중이에요. 첫 요청은 최대 1분 정도 걸릴 수 있어요.
+  </div>
+
+  <main>
+    <section id="summary" class="summary" aria-label="데이터 요약">
+      <div class="muted">요약을 불러오는 중…</div>
+    </section>
+
+    <!-- [추가] 추가 지표 + 추세 그래프 -->
+    <section id="insights" class="insights" aria-label="추가 지표와 추세 그래프">
+      <div id="statCards" class="summary"></div>
+      <div class="chart-card">
+        <div class="chart-head">
+          <h2>주말 관객수 추이</h2>
+          <span class="muted">점선은 4주 이동평균이에요</span>
+        </div>
+        <div class="chart-wrap"><canvas id="trendChart" role="img" aria-label="주말 박스오피스 관객수 추이 그래프"></canvas></div>
+        <div id="chartMsg" class="msg" hidden></div>
+      </div>
+    </section>
+
+    <nav class="tabs" role="tablist">
+      <button class="tab active" role="tab" data-tab="chat" aria-selected="true">💬 채팅</button>
+      <button class="tab" role="tab" data-tab="data" aria-selected="false">🗂 데이터 관리</button>
+      <button class="tab" role="tab" data-tab="history" aria-selected="false">🕘 대화 기록</button>
+    </nav>
+
+    <!-- 채팅 -->
+    <section id="tab-chat" class="panel">
+      <div class="panel-head">
+        <span class="muted">저장된 데이터 요약을 바탕으로 답해요.</span>
+        <button id="newChat" class="btn small ghost">＋ 새 대화</button>
+      </div>
+      <div id="chatLog" class="chat-log" aria-live="polite"></div>
+      <div id="chips" class="chips"></div>
+      <form id="chatForm" class="chat-form" autocomplete="off">
+        <input id="chatInput" type="text" maxlength="1000" placeholder="예: 가장 흥행한 주말은 언제였어?" required />
+        <button id="sendBtn" class="btn" type="submit">보내기</button>
+      </form>
+    </section>
+
+    <!-- 데이터 관리 -->
+    <section id="tab-data" class="panel" hidden>
+      <div class="sync-row">
+        <button id="syncBtn" class="btn ghost" type="button">🔄 최신 데이터 가져오기</button>
+        <!-- [추가] 내보내기 버튼 -->
+        <button id="exportCsv" class="btn ghost" type="button">⬇ CSV</button>
+        <button id="exportJson" class="btn ghost" type="button">⬇ JSON</button>
+        <span class="muted">KOBIS에서 최근 8주를 확인해 없는 주말만 추가해요.</span>
+      </div>
+      <form id="addForm" class="add-form">
+        <label>날짜(금요일)
+          <input id="addDate" type="date" required />
+        </label>
+        <label>관객수 합계
+          <input id="addValue" type="number" min="0" step="1" placeholder="예: 12500000" required />
+        </label>
+        <label class="grow">메모
+          <input id="addMemo" type="text" maxlength="200" placeholder="예: 1위: 영화명 | 신규 진입 2편" />
+        </label>
+        <button class="btn" type="submit">추가</button>
+      </form>
+      <div id="dataMsg" class="msg" hidden></div>
+      <div class="muted" id="dataCount"></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>날짜</th><th class="num">관객수(상위 10편 합계)</th><th>메모</th><th>관리</th></tr></thead>
+          <tbody id="dataBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 대화 기록 -->
+    <section id="tab-history" class="panel" hidden>
+      <div id="convList" class="conv-list"></div>
+    </section>
+  </main>
+
+  <dialog id="editDialog">
+    <form id="editForm" class="edit-form">
+      <h3>데이터 수정</h3>
+      <div class="muted" id="editDate"></div>
+      <label>관객수 합계
+        <input id="editValue" type="number" min="0" step="1" required />
+      </label>
+      <label>메모
+        <input id="editMemo" type="text" maxlength="200" />
+      </label>
+      <div id="editMsg" class="msg" hidden></div>
+      <div class="row-end">
+        <button type="button" id="editCancel" class="btn ghost">취소</button>
+        <button type="submit" class="btn">저장</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
